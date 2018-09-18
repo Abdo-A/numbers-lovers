@@ -1,23 +1,14 @@
-import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Main from "./src/pages/main";
-import Names from "./src/pages/names";
+import { TextInput } from "react-native-gesture-handler";
+import React from "react";
 
-export default class App extends React.Component {
+import Main from "./src/pages/Main";
+import Names from "./src/pages/Names";
+
+class App extends React.Component {
   render() {
-    return (
-      <View style={styles.container}>
-        <Main />
-      </View>
-    );
+    return <Main />;
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
+export default App;
