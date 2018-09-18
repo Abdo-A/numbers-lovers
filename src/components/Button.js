@@ -7,6 +7,7 @@ const Button = props => {
   globalProps = props;
   return (
     <TouchableOpacity
+      onPress={props.onPress}
       style={{
         backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff",
         width: "80%",
@@ -19,7 +20,7 @@ const Button = props => {
     >
       <Text
         style={{
-          color: props.fontColor ? props.fontColor : "#000",
+          color: props.fontColor ? props.fontColor : "#fff",
           fontWeight: "bold"
         }}
       >
