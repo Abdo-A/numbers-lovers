@@ -1,7 +1,9 @@
-import { Text, View, StyleSheet, Keyboard } from "react-native";
+import { connect } from "react-redux";
+import { View, StyleSheet, Keyboard } from "react-native";
 import axios from "axios";
 import React, { Component } from "react";
 
+import * as actions from "../store/actions";
 import Button from "../components/Button";
 import MainHeading from "../components/MainHeading";
 import TextInput from "../components/TextInput";
@@ -15,9 +17,7 @@ class Main extends Component {
 
   onSetChosenNumber = num => {
     if ((parseInt(num) == num && !num.includes(".")) || num === "") {
-      this.setState({
-        chosenNumber: num
-      });
+      this.props.setChosenNumber(num);
     } else {
       return;
     }
@@ -25,22 +25,18 @@ class Main extends Component {
 
   onRequestClick = () => {
     Keyboard.dismiss();
+    this.props.history.push("/output");
   };
 
   onGetaFact = () => {
     this.onRequestClick();
 
-    this.setState(() => ({
-      request: "fact"
-    }));
+    this.props.setRequest("fact");
 
     axios
       .get("http://numbersapi.com/" + this.state.chosenNumber)
       .then(res => {
-        if (this.state.request === "fact")
-          this.setState(() => ({
-            output: res.data
-          }));
+        if (this.state.request === "fact") this.props.setOutput(res.data);
       })
       .catch(error => console.log(error, "errorrr"));
   };
@@ -48,17 +44,12 @@ class Main extends Component {
   onGetaMathFact = () => {
     this.onRequestClick();
 
-    this.setState(() => ({
-      request: "mathFact"
-    }));
+    this.props.setRequest("mathFact");
 
     axios
       .get("http://numbersapi.com/" + this.state.chosenNumber + "/math")
       .then(res => {
-        if (this.state.request === "mathFact")
-          this.setState(() => ({
-            output: res.data
-          }));
+        if (this.state.request === "mathFact") this.props.setOutput(res.data);
       })
       .catch(error => console.log(error, "errorrrr"));
   };
@@ -66,37 +57,25 @@ class Main extends Component {
   onGetAllPrimeNumbersBefore = () => {
     this.onRequestClick();
 
-    this.setState(() => ({
-      request: "prime"
-    }));
+    this.props.setRequest("prime");
 
-    this.setState(() => ({
-      output: "prime"
-    }));
+    this.props.setOutput("prime");
   };
 
   onGetNothing = () => {
     this.onRequestClick();
 
-    this.setState(() => ({
-      request: "nothing"
-    }));
+    this.props.setRequest("nothing");
 
-    this.setState(() => ({
-      output: "nothing"
-    }));
+    this.props.setOutput("nothing");
   };
 
   onGetEverything = () => {
     this.onRequestClick();
 
-    this.setState(() => ({
-      output: "everything"
-    }));
+    this.props.setRequest("everything");
 
-    this.setState(() => ({
-      output: "everything"
-    }));
+    this.props.setOutput("everything");
   };
 
   render() {
@@ -132,9 +111,17 @@ class Main extends Component {
           Get Everything
         </Button>
 
-        {/*3rd view, for output*/}
-
-        <Text>{this.state.output}</Text>
+        <Button
+          height={80}
+          width={150}
+          borderRadius={80}
+          border
+          fontColor="#444"
+          backgroundColor="#fff"
+          onPress={() => this.props.history.push("/names")}
+        >
+          Our Users Names
+        </Button>
       </View>
     );
   }
@@ -145,8 +132,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#39CCCC",
     alignItems: "center",
-    paddingTop: 80
+    paddingTop: 60
   }
 });
 
-export default Main;
+const mapDispatchToProps = dispatch => {
+  return {
+    setChosenNumber: num => dispatch(actions.setChosenNumber(num)),
+    setRequest: request => dispatch(actions.setRequest(request)),
+    setOutput: output => dispatch(actions.setOutput(output))
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Main);

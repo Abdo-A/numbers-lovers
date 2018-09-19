@@ -9,10 +9,11 @@ const Button = props => {
     <TouchableOpacity
       onPress={props.onPress}
       style={{
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff",
-        width: "80%",
-        height: 40,
-        borderRadius: 5,
+        backgroundColor: props.backgroundColor ? props.backgroundColor : "#999",
+        width: props.width ? props.width : "80%",
+        height: props.height ? props.height : 40,
+        borderRadius: props.borderRadius ? props.borderRadius : 5,
+        borderWidth: props.border ? 1 : 0,
         alignItems: "center",
         justifyContent: "center",
         margin: 10
@@ -34,5 +35,8 @@ const Button = props => {
 //children
 //fontColor (optional)
 //backgroundColor (optional)
+//width (optional)
+//height (optional)
+//borderRadius (optional)
 
 export default Button;

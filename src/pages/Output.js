@@ -1,7 +1,8 @@
+import { connect } from "react-redux";
 import { View, Text, StyleSheet, BackHandler } from "react-native";
 import React, { Component } from "react";
 
-class Names extends Component {
+class Output extends Component {
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
   }
@@ -18,11 +19,7 @@ class Names extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>I am names page</Text>
-        <Text>-> Ahmed</Text>
-        <Text>-> Moha</Text>
-        <Text>-> Abdo</Text>
-        <Text>-> Gamma</Text>
+        <Text>{this.props.chosenNumber}</Text>
       </View>
     );
   }
@@ -37,4 +34,14 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Names;
+const mapStateToProps = state => {
+  return {
+    chosenNumber: state.chosenNumber,
+    output: state.output
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Output);
