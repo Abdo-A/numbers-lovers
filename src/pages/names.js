@@ -1,5 +1,13 @@
 import { connect } from "react-redux";
-import { View, Text, StyleSheet, BackHandler } from "react-native";
+
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  BackHandler,
+  ActivityIndicator
+} from "react-native";
 import React, { Component } from "react";
 
 import * as actions from "../store/actions";
@@ -20,29 +28,34 @@ class Names extends Component {
     return true;
   };
 
-  love = [];
-
   render() {
-    if (this.props.usersNames) {
-      console.log(typeof this.props.usersNames[0]);
-      console.log(this.props.usersNames);
-      this.love = this.props.usersNames[3];
-    }
     return (
       <View style={styles.container}>
-        <Text>Names</Text>
+        <ScrollView style={styles.scrollContainer}>
+          <Text style={styles.heading}>
+            We are proud of our amazing members: {"\n"}
+          </Text>
 
-        <Text>
-          {this.props.usersNames
-            ? this.props.usersNames.map(name => {
-                return (
-                  <Text style={styles.name} key={name}>
-                    {name} {"\n"}
-                  </Text>
-                );
-              })
-            : ""}
-        </Text>
+          <Text style={styles.namesContainer}>
+            {this.props.usersNames
+              ? this.props.usersNames.map((name, i) => {
+                  return (
+                    <Text style={styles.name} key={name}>
+                      {i + 1}- {name} {"\n"}
+                    </Text>
+                  );
+                })
+              : ""}
+          </Text>
+
+          {this.props.usersNames ? (
+            <View />
+          ) : (
+            <View>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          )}
+        </ScrollView>
       </View>
     );
   }
@@ -52,11 +65,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#39CCCC",
-    alignItems: "center",
-    paddingTop: 80,
-    overflow: "scroll"
+    borderWidth: 20,
+    borderColor: "brown"
   },
-  name: {}
+  scrollContainer: { marginTop: 30 },
+  namesContainer: {
+    textAlign: "center"
+  },
+  heading: {
+    textAlign: "center",
+    fontFamily: "sans-serif-condensed",
+    fontWeight: "bold"
+  },
+  name: {
+    marginTop: 20,
+    marginBottom: 20,
+    color: "#fff",
+    fontSize: 25,
+    fontWeight: "bold"
+  }
 });
 
 const mapStateToProps = state => {

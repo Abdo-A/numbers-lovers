@@ -1,5 +1,12 @@
 import { connect } from "react-redux";
-import { View, Text, StyleSheet, BackHandler } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  BackHandler,
+  ActivityIndicator,
+  ScrollView
+} from "react-native";
 import React, { Component } from "react";
 
 class Output extends Component {
@@ -18,20 +25,34 @@ class Output extends Component {
 
   render() {
     output =
-      this.props.request === "prime" ? (
-        <Text>
+      this.props.request === "prime" &&
+      typeof this.props.output !== "string" ? (
+        <ScrollView
+          style={{
+            width: "100%",
+            marginTop: parseInt(this.props.chosenNumber) < 20 ? 140 : 40
+          }}
+        >
           {this.props.output.map(number => (
             <Text key={number} style={styles.text}>
               {number}
               {"\n"}
             </Text>
           ))}
-        </Text>
+        </ScrollView>
       ) : (
         <Text style={styles.text}>{this.props.output}</Text>
       );
 
-    return <View style={styles.container}>{output}</View>;
+    return (
+      <View style={styles.container}>
+        {this.props.output ? (
+          output
+        ) : (
+          <ActivityIndicator size="large" color="#0000ff" />
+        )}
+      </View>
+    );
   }
 }
 

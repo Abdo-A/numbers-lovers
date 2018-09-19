@@ -17,7 +17,7 @@ const MainHeading = props => {
         paddingBottom: 10,
         paddingLeft: 20,
         paddingRight: 20,
-        marginBottom: 30
+        marginBottom: 20
       }}
     >
       {props.children}

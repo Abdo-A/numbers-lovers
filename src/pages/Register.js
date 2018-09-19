@@ -1,5 +1,11 @@
 import { connect } from "react-redux";
-import { View, Text, StyleSheet, Keyboard } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Keyboard,
+  ActivityIndicator
+} from "react-native";
 import React, { Component } from "react";
 
 import * as actions from "../store/actions";
@@ -9,11 +15,18 @@ import TextInput from "../components/TextInput";
 class Register extends Component {
   state = {
     welcomeMessage: null,
-    warning: null
+    warning: null,
+    loading: false
   };
 
   componentDidMount() {
     this.props.getUsersNames();
+  }
+
+  componentWillUnmount() {
+    this.setState(() => ({
+      loading: false
+    }));
   }
 
   onSetUserName = name => {
@@ -46,22 +59,24 @@ class Register extends Component {
 
       if (oldUser) {
         this.setState(() => ({
-          welcomeMessage: "You are an old user.. Welcome!"
+          welcomeMessage: "You are an old user.. Welcome!",
+          loading: true
         }));
 
         setTimeout(() => {
           this.props.history.push("/main");
-        }, 1000);
+        }, 1500);
       } else {
         this.props.postCurrentUserName(this.props.currentUserName);
 
         this.setState(() => ({
-          welcomeMessage: "You are a new user.. Welcome!"
+          welcomeMessage: "You are a new user.. Welcome!",
+          loading: true
         }));
 
         setTimeout(() => {
           this.props.history.push("/main");
-        }, 1000);
+        }, 1500);
       }
     } else {
       this.props.history.push("/main");
@@ -82,6 +97,10 @@ class Register extends Component {
           onSetValue={this.onSetUserName}
         />
         <Text style={styles.warning}>{this.state.warning}</Text>
+
+        {this.state.loading && (
+          <ActivityIndicator size="large" color="#0000ff" />
+        )}
 
         <Button height={70} width="60%" onPress={this.onGoButtonPress}>
           Go

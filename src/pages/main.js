@@ -75,6 +75,10 @@ class Main extends Component {
     }
 
     this.props.setOutput(primes);
+
+    if (this.props.chosenNumber == 0) {
+      this.props.setOutput("Oh, really?");
+    }
   };
 
   onGetNothing = () => {
@@ -102,7 +106,13 @@ class Main extends Component {
 
         {/* warning */}
 
-        <Text>{this.state.warning}</Text>
+        <Text>
+          {this.state.warning ? (
+            <Text style={styles.warning}>{this.state.warning}</Text>
+          ) : (
+            "Number:"
+          )}
+        </Text>
 
         {/* input */}
 
@@ -159,6 +169,9 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontWeight: "bold"
+  },
+  warning: {
+    color: "red"
   }
 });
 
