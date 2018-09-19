@@ -8,6 +8,7 @@ import Main from "./src/pages/Main";
 import Names from "./src/pages/Names";
 import Output from "./src/pages/Output";
 import reducer from "./src/store/reducer";
+import Register from "./src/pages/Register";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -19,7 +20,8 @@ class App extends React.Component {
       <Provider store={store}>
         <NativeRouter>
           <Switch>
-            <Route exact path="/" component={Main} />
+            <Route exact path="/" component={Register} />
+            <Route exact path="/main" component={Main} />
             <Route exact path="/names" component={Names} />
             <Route exact path="/output" component={Output} />
           </Switch>

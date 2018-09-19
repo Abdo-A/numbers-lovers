@@ -5,20 +5,27 @@ const textInput = props => {
   return (
     <TextInput
       onChangeText={text => {
-        props.onSetChosenNumber(text);
+        props.onSetValue(text);
       }}
-      value={props.chosenNumber}
+      value={props.value}
       style={{
         width: "60%",
-        borderWidth: 1,
+        height: props.height ? props.height : 40,
+        fontSize: props.fontSize ? props.fontSize : 15,
+        borderWidth: props.border ? 1 : 0,
         backgroundColor: "#fff",
         padding: 5,
         textAlign: "center",
-        marginBottom: 30
+        marginBottom: props.marginBottom ? props.marginBottom : 30,
+        marginTop: props.marginTop ? props.marginTop : 0
       }}
-      keyboardType="numeric"
+      keyboardType={props.numeric ? "numeric" : "default"}
     />
   );
 };
+
+//Expected props:
+//value
+//onSetValue
 
 export default textInput;

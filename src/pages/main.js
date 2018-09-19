@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
-import { View, StyleSheet, Keyboard } from "react-native";
-import axios from "axios";
+import { View, Text, StyleSheet, Keyboard, BackHandler } from "react-native";
 import React, { Component } from "react";
 
 import * as actions from "../store/actions";
@@ -10,9 +9,20 @@ import TextInput from "../components/TextInput";
 
 class Main extends Component {
   state = {
-    request: null, //fact || mathFact || prime || everything || nothing
-    chosenNumber: null,
-    output: null
+    warning: null
+  };
+
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
+  }
+
+  handleBackButton = () => {
+    this.props.history.push("/");
+    return true;
   };
 
   onSetChosenNumber = num => {
@@ -25,72 +35,84 @@ class Main extends Component {
 
   onRequestClick = () => {
     Keyboard.dismiss();
-    this.props.history.push("/output");
+    if (this.props.chosenNumber) {
+      this.props.history.push("/output");
+    } else {
+      this.setState(() => ({
+        warning: "Please enter a number"
+      }));
+    }
   };
 
   onGetaFact = () => {
     this.onRequestClick();
-
     this.props.setRequest("fact");
-
-    axios
-      .get("http://numbersapi.com/" + this.state.chosenNumber)
-      .then(res => {
-        if (this.state.request === "fact") this.props.setOutput(res.data);
-      })
-      .catch(error => console.log(error, "errorrr"));
+    this.props.requestFact(this.props.chosenNumber);
   };
 
   onGetaMathFact = () => {
     this.onRequestClick();
-
     this.props.setRequest("mathFact");
-
-    axios
-      .get("http://numbersapi.com/" + this.state.chosenNumber + "/math")
-      .then(res => {
-        if (this.state.request === "mathFact") this.props.setOutput(res.data);
-      })
-      .catch(error => console.log(error, "errorrrr"));
+    this.props.requestMathFact(this.props.chosenNumber);
   };
 
   onGetAllPrimeNumbersBefore = () => {
     this.onRequestClick();
-
     this.props.setRequest("prime");
 
-    this.props.setOutput("prime");
+    let sieve = [],
+      i,
+      j,
+      primes = [];
+    for (i = 2; i <= this.props.chosenNumber; ++i) {
+      if (!sieve[i]) {
+        // i has not been marked -- it is prime
+        primes.push(i);
+        for (j = i << 1; j <= this.props.chosenNumber; j += i) {
+          sieve[j] = true;
+        }
+      }
+    }
+
+    this.props.setOutput(primes);
   };
 
   onGetNothing = () => {
     this.onRequestClick();
-
     this.props.setRequest("nothing");
-
     this.props.setOutput("nothing");
   };
 
   onGetEverything = () => {
     this.onRequestClick();
-
     this.props.setRequest("everything");
-
     this.props.setOutput("everything");
   };
 
   render() {
     return (
       <View style={styles.container}>
-        {/*1st view, for heading and input*/}
+        {/* greeting */}
+
+        <Text style={styles.greeting}>Hello {this.props.currentUserName}!</Text>
+
+        {/* heading */}
 
         <MainHeading>What's your favorite number?</MainHeading>
 
+        {/* warning */}
+
+        <Text>{this.state.warning}</Text>
+
+        {/* input */}
+
         <TextInput
-          chosenNumber={this.state.chosenNumber}
-          onSetChosenNumber={this.onSetChosenNumber}
+          value={this.props.chosenNumber}
+          onSetValue={this.onSetChosenNumber}
+          numeric
         />
 
-        {/*2nd view, for buttons*/}
+        {/* buttons */}
 
         <Button backgroundColor="#766F57" onPress={this.onGetaFact}>
           Get a Fact
@@ -117,10 +139,11 @@ class Main extends Component {
           borderRadius={80}
           border
           fontColor="#444"
-          backgroundColor="#fff"
+          backgroundColor="#ddd"
+          fontSize={24}
           onPress={() => this.props.history.push("/names")}
         >
-          Our Users Names
+          Our Users
         </Button>
       </View>
     );
@@ -132,19 +155,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#39CCCC",
     alignItems: "center",
-    paddingTop: 60
+    paddingTop: 50
+  },
+  greeting: {
+    fontWeight: "bold"
   }
 });
 
+const mapStateToProps = state => {
+  return {
+    chosenNumber: state.chosenNumber,
+    currentUserName: state.currentUserName
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
-    setChosenNumber: num => dispatch(actions.setChosenNumber(num)),
+    setChosenNumber: number => dispatch(actions.setChosenNumber(number)),
     setRequest: request => dispatch(actions.setRequest(request)),
-    setOutput: output => dispatch(actions.setOutput(output))
+    setOutput: output => dispatch(actions.setOutput(output)),
+    requestFact: number => dispatch(actions.requestFact(number)),
+    requestMathFact: number => dispatch(actions.requestMathFact(number))
   };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Main);

@@ -22,7 +22,8 @@ const Button = props => {
       <Text
         style={{
           color: props.fontColor ? props.fontColor : "#fff",
-          fontWeight: "bold"
+          fontWeight: "bold",
+          fontSize: props.fontSize ? props.fontSize : 18
         }}
       >
         {props.children}

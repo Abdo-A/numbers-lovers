@@ -12,30 +12,50 @@ class Output extends Component {
   }
 
   handleBackButton = () => {
-    this.props.history.push("/");
+    this.props.history.push("/main");
     return true;
   };
 
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>{this.props.chosenNumber}</Text>
-      </View>
-    );
+    output =
+      this.props.request === "prime" ? (
+        <Text>
+          {this.props.output.map(number => (
+            <Text key={number} style={styles.text}>
+              {number}
+              {"\n"}
+            </Text>
+          ))}
+        </Text>
+      ) : (
+        <Text style={styles.text}>{this.props.output}</Text>
+      );
+
+    return <View style={styles.container}>{output}</View>;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    display: "flex",
     backgroundColor: "#39CCCC",
     alignItems: "center",
-    paddingTop: 80
+    justifyContent: "center",
+    paddingLeft: 30,
+    paddingRight: 30
+  },
+  text: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 30,
+    textAlign: "center"
   }
 });
 
 const mapStateToProps = state => {
   return {
+    request: state.request,
     chosenNumber: state.chosenNumber,
     output: state.output
   };

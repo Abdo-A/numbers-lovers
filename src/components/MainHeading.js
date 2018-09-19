@@ -8,6 +8,7 @@ const MainHeading = props => {
         fontFamily: "sans-serif-condensed",
         color: props.fontColor ? props.fontColor : "#000",
         fontWeight: "bold",
+        backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff",
         fontSize: 25,
         borderWidth: 2,
         borderRadius: 10,
