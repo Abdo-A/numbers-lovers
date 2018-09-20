@@ -56,6 +56,9 @@ class Names extends Component {
             </View>
           )}
         </ScrollView>
+        <Text style={{ textAlign: "center" }}>
+          (Demo App to be delivered to Dr. Ahmed Hassan)
+        </Text>
       </View>
     );
   }

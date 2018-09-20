@@ -1,9 +1,12 @@
 import React from "react";
 import { Text } from "react-native";
+import * as Animatable from "react-native-animatable";
 
 const MainHeading = props => {
   return (
-    <Text
+    <Animatable.Text
+      animation="bounceIn"
+      easing="ease-out"
       style={{
         fontFamily: "sans-serif-condensed",
         color: props.fontColor ? props.fontColor : "#000",
@@ -21,7 +24,7 @@ const MainHeading = props => {
       }}
     >
       {props.children}
-    </Text>
+    </Animatable.Text>
   );
 };
 

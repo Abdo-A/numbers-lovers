@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { View, Text, StyleSheet, Keyboard, BackHandler } from "react-native";
+import * as Animatable from "react-native-animatable";
 import React, { Component } from "react";
 
 import * as actions from "../store/actions";
@@ -35,8 +36,16 @@ class Main extends Component {
 
   onRequestClick = () => {
     Keyboard.dismiss();
+
+    this.setState(() => ({
+      warning: null
+    }));
+
     if (this.props.chosenNumber) {
-      this.props.history.push("/output");
+      this.mainView.bounceOut(500);
+      setTimeout(() => {
+        this.props.history.push("/output");
+      }, 550);
     } else {
       this.setState(() => ({
         warning: "Please enter a number"
@@ -90,71 +99,83 @@ class Main extends Component {
   onGetEverything = () => {
     this.onRequestClick();
     this.props.setRequest("everything");
-    this.props.setOutput("everything");
+    this.props.setOutput(this.props.chosenNumber);
   };
 
   render() {
     return (
-      <View style={styles.container}>
-        {/* greeting */}
-
-        <Text style={styles.greeting}>Hello {this.props.currentUserName}!</Text>
-
-        {/* heading */}
-
-        <MainHeading>What's your favorite number?</MainHeading>
-
-        {/* warning */}
-
-        <Text>
-          {this.state.warning ? (
-            <Text style={styles.warning}>{this.state.warning}</Text>
-          ) : (
-            "Number:"
-          )}
-        </Text>
-
-        {/* input */}
-
-        <TextInput
-          value={this.props.chosenNumber}
-          onSetValue={this.onSetChosenNumber}
-          numeric
-        />
-
-        {/* buttons */}
-
-        <Button backgroundColor="#766F57" onPress={this.onGetaFact}>
-          Get a Fact
-        </Button>
-        <Button backgroundColor="#E47A2E" onPress={this.onGetaMathFact}>
-          Get a math Fact
-        </Button>
-        <Button
-          backgroundColor="#BE9EC9"
-          onPress={this.onGetAllPrimeNumbersBefore}
+      <View style={{ backgroundColor: "#39CCCC", flex: 1 }}>
+        <Animatable.View
+          ref={ref => {
+            this.mainView = ref;
+          }}
+          style={styles.container}
         >
-          Get all prime numbers before
-        </Button>
-        <Button backgroundColor="#E94B3C" onPress={this.onGetNothing}>
-          Get Nothing
-        </Button>
-        <Button backgroundColor="#6C4F3D" onPress={this.onGetEverything}>
-          Get Everything
-        </Button>
+          {/* greeting */}
 
-        <Button
-          height={80}
-          width={150}
-          borderRadius={80}
-          border
-          fontColor="#444"
-          backgroundColor="#ddd"
-          fontSize={24}
-          onPress={() => this.props.history.push("/names")}
-        >
-          Our Users
-        </Button>
+          <Text style={styles.greeting}>
+            Hello {this.props.currentUserName}!
+          </Text>
+
+          {/* heading */}
+
+          <MainHeading>What's your favorite number?</MainHeading>
+
+          {/* warning */}
+
+          <Text>
+            {this.state.warning ? (
+              <Text style={styles.warning}>{this.state.warning}</Text>
+            ) : (
+              "Number:"
+            )}
+          </Text>
+
+          {/* input */}
+
+          <TextInput
+            value={this.props.chosenNumber}
+            onSetValue={this.onSetChosenNumber}
+            fontSize={20}
+            numeric
+          />
+
+          {/* buttons */}
+
+          <Button backgroundColor="#766F57" onPress={this.onGetaFact}>
+            Get a Fact
+          </Button>
+          <Button backgroundColor="#E47A2E" onPress={this.onGetaMathFact}>
+            Get a math Fact
+          </Button>
+          <Button
+            backgroundColor="#BE9EC9"
+            onPress={this.onGetAllPrimeNumbersBefore}
+          >
+            Get all prime numbers before
+          </Button>
+
+          <Button backgroundColor="#6C4F3D" onPress={this.onGetEverything}>
+            Get Everything
+          </Button>
+
+          <Button backgroundColor="#E94B3C" onPress={this.onGetNothing}>
+            Get Nothing
+          </Button>
+
+          <Button
+            height={80}
+            width={230}
+            borderRadius={80}
+            border
+            fontColor="#444"
+            backgroundColor="#ddd"
+            fontSize={24}
+            onPress={() => this.props.history.push("/names")}
+          >
+            Our User Base
+          </Button>
+        </Animatable.View>
       </View>
     );
   }
@@ -168,7 +189,8 @@ const styles = StyleSheet.create({
     paddingTop: 50
   },
   greeting: {
-    fontWeight: "bold"
+    fontWeight: "bold",
+    color: "#fff"
   },
   warning: {
     color: "red"

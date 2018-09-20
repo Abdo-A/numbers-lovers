@@ -1,4 +1,6 @@
 import { connect } from "react-redux";
+import * as Animatable from "react-native-animatable";
+
 import {
   View,
   Text,
@@ -52,31 +54,35 @@ class Register extends Component {
 
     if (this.props.usersNames) {
       this.props.usersNames.map(name => {
-        if (name == this.props.currentUserName) {
+        if (name == this.props.currentUserName.trim()) {
           oldUser = true;
         }
       });
 
       if (oldUser) {
         this.setState(() => ({
-          welcomeMessage: "You are an old user.. Welcome!",
+          welcomeMessage: "You are an old user. Welcome!",
           loading: true
         }));
 
         setTimeout(() => {
           this.props.history.push("/main");
-        }, 1500);
+        }, 1200);
       } else {
-        this.props.postCurrentUserName(this.props.currentUserName);
+        this.props.postCurrentUserName(this.props.currentUserName.trim());
 
         this.setState(() => ({
-          welcomeMessage: "You are a new user.. Welcome!",
+          welcomeMessage: "You are a new user. Welcome!",
           loading: true
         }));
 
         setTimeout(() => {
+          this.setState(() => ({
+            loading: false
+          }));
+
           this.props.history.push("/main");
-        }, 1500);
+        }, 1200);
       }
     } else {
       this.props.history.push("/main");
@@ -86,17 +92,33 @@ class Register extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.joinUsNow}>Join us</Text>
+        <Animatable.Text
+          animation="bounceInLeft"
+          easing="ease-out"
+          duration={1000}
+          style={styles.joinUsNow}
+        >
+          Join us
+        </Animatable.Text>
+
         <Text style={styles.typeYourName}>Type your name:</Text>
         <TextInput
           marginTop={20}
-          marginBottom={60}
+          marginBottom={30}
           height={60}
           fontSize={35}
           value={this.props.currentUserName}
           onSetValue={this.onSetUserName}
         />
         <Text style={styles.warning}>{this.state.warning}</Text>
+
+        <Animatable.Text
+          animation="flipInY"
+          easing="ease-out"
+          style={styles.welcomeMessage}
+        >
+          {this.state.welcomeMessage}
+        </Animatable.Text>
 
         {this.state.loading && (
           <ActivityIndicator size="large" color="#0000ff" />
@@ -105,7 +127,6 @@ class Register extends Component {
         <Button height={70} width="60%" onPress={this.onGoButtonPress}>
           Go
         </Button>
-        <Text style={styles.welcomeMessage}>{this.state.welcomeMessage}</Text>
       </View>
     );
   }
@@ -119,8 +140,8 @@ const styles = StyleSheet.create({
     paddingTop: 80
   },
   joinUsNow: {
-    color: "yellow",
-    fontSize: 40,
+    color: "#FFDC00",
+    fontSize: 50,
     fontWeight: "bold",
     marginBottom: 40
   },
@@ -132,10 +153,10 @@ const styles = StyleSheet.create({
     color: "red"
   },
   welcomeMessage: {
-    color: "red",
+    color: "#FF4136",
     fontSize: 23,
     fontWeight: "bold",
-    marginTop: 20
+    marginBottom: 20
   }
 });
 

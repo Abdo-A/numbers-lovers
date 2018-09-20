@@ -75,6 +75,7 @@ export const getUsersNames = name => {
       })
       .catch(error => {
         console.log("error", error);
+        dispatch(setOutput(["Please check your internet connection"]));
       });
   };
 };
@@ -91,6 +92,7 @@ export const requestFact = number => {
       })
       .catch(error => {
         console.log("error", error);
+        dispatch(setOutput("Please check your internet connection"));
       });
   };
 };
@@ -108,6 +110,7 @@ export const requestMathFact = number => {
       })
       .catch(error => {
         console.log("error", error);
+        dispatch(setOutput("Please check your internet connection"));
       });
   };
 };
