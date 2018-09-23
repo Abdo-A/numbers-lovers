@@ -1,5 +1,23 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
+    "name": "Numbers Lovers",
+    "icon": "./icon512x512.png",
+    "description": "Are you a numbers lover? This app is for you! A great app made for math geeks. Made as a demo project, to be delivered to Dr. Ahmed Hassan, professor at Ain Shams University in Cairo, Egypt",
+    "sdkVersion": "27.0.0",
+    "version": "1.0.0",
+    "notification": {
+      "icon": "./icon144x144.png",
+      "color": "#000000"
+    },
+    "loading": {
+      "icon": "./icon500x500.png"
+    },
+    "ios": {
+      "bundleIdentifier": "com.abdo.numberslovers",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.abdo.numberslovers"
+    }
   }
 }
