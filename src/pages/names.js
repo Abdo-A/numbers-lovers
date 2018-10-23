@@ -6,7 +6,8 @@ import {
   ScrollView,
   StyleSheet,
   BackHandler,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from "react-native";
 import React, { Component } from "react";
 
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     textAlign: "center",
-    fontFamily: "sans-serif-condensed",
+    fontFamily: Platform.OS === "ios" ? "System" : "sans-serif-condensed",
     fontWeight: "bold"
   },
   name: {

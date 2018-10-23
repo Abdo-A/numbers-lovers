@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, Platform } from "react-native";
 import * as Animatable from "react-native-animatable";
 
 const MainHeading = props => {
@@ -8,7 +8,7 @@ const MainHeading = props => {
       animation="bounceIn"
       easing="ease-out"
       style={{
-        fontFamily: "sans-serif-condensed",
+        fontFamily: Platform.OS === "ios" ? "System" : "sans-serif-condensed",
         color: props.fontColor ? props.fontColor : "#000",
         fontWeight: "bold",
         backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff",
